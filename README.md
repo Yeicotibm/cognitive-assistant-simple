@@ -20,7 +20,7 @@ If you want to modify the app or use it as a basis for building your own app, in
 
 ### Getting the files
 
-Use GitHub to clone the repository locally, or [download the .zip file](https://github.com/watson-developer-cloud/assistant-simple/archive/master.zip) of the repository and extract the files.
+Use GitHub to clone the repository locally, or [download the .zip file](https://github.com/Yeicotibm/cognitive-assistant-simple/archive/master.zip) of the repository and extract the files.
 
 ### Setting up the Watson Assistant service
 
@@ -36,7 +36,7 @@ You can use an exisiting instance of the Watson Assistant service. Otherwise, fo
 1. Create an instance of the Watson Assistant service in IBM Cloud (our CLI is being updated, for now, use the `create-service` conversation command). For example:
 
     ```bash
-    cf create-service conversation free my-watson-assistant-service
+    cf create-service conversation free eventConversation
     ```
 
 ### Importing the Watson Assistant workspace
@@ -45,13 +45,11 @@ You can use an exisiting instance of the Watson Assistant service. Otherwise, fo
 
 1. From the **All Items** tab, click the newly created Watson Assistant service in the **Services** list.
 
-    ![Screen capture of Services list](readme_images/conversation_service.png)
-
 1. On the Service Details page, click **Launch tool**.
 
 1. Click the **Import workspace** icon in the Watson Assistant service tool. Specify the location of the workspace JSON file in your local copy of the app project:
 
-    `<project_root>/training/car_workspace.json`
+    `<project_root>/training/event_workspace.json`
 
 1. Select **Everything (Intents, Entities, and Dialog)** and then click **Import**. The car dashboard workspace is created.
 
@@ -62,13 +60,13 @@ You can use an exisiting instance of the Watson Assistant service. Otherwise, fo
 1. Create a service key in the format `cf create-service-key <service_instance> <service_key>`. For example:
 
     ```bash
-    cf create-service-key my-watson-assistant-service myKey
+    cf create-service-key eventConversation myKey
     ```
 
 1. Retrieve the credentials from the service key using the command `cf service-key <service_instance> <service_key>`. For example:
 
     ```bash
-    cf service-key my-watson-assistant-service myKey
+    cf service-key eventConversation myKey
     ```
 
    The output from this command is a JSON object, as in this example:
@@ -92,8 +90,6 @@ You can use an exisiting instance of the Watson Assistant service. Otherwise, fo
 
 1. Click the menu icon in the upper-right corner of the workspace tile, and then select **View details**.
 
-    ![Screen capture of workspace tile menu](readme_images/workspace_details.png)
-
 1. Click the ![Copy](readme_images/copy_icon.png) icon to copy the workspace ID to the clipboard.
 
 1. On the local system, paste the workspace ID into the WORKSPACE_ID variable in the `.env` file. Save and close the file.
@@ -114,39 +110,6 @@ You can use an exisiting instance of the Watson Assistant service. Otherwise, fo
 
 1. Point your browser to http://localhost:3000 to try out the app.
 
-## Testing the app
-
-After your app is installed and running, experiment with it to see how it responds.
-
-The chat interface is on the left, and the JSON that the JavaScript code receives from the Watson Assistant service is on the right. Your questions and commands are interpreted using a small set of sample data trained with the following intents:
-
-    turn_on
-    turn_off
-    turn_up
-    turn_down
-    traffic_update
-    locate_amenity
-    weather
-    phone
-    capabilities
-    greetings
-    goodbyes
-
-Type a request, such as `music on` or `I want to turn on the windshield wipers`. The system understands your intent and responds. You can see the details of how your input was understood by examining the JSON data in the `Watson understands` section on the right side.
-
-For example, if you type `Turn on some music`, the JSON data shows that the system understood the `turn_on` intent with a high level of confidence, along with the `appliance` entity with a value of `music`.
-
-For more information about intents, see the [Watson Assistant service documentation][doc_intents].
-
-To see details of how these intents are defined, including sample input for each intent, launch the Watson Assistant tool.
-
-## Modifying the app
-
-After you have the app deployed and running, you can explore the source files and make changes. Try the following:
-
-* Modify the .js files to change the app logic.
-* Modify the .html file to change the appearance of the app page.
-* Use the Watson Assistant tool to train the service for new intents, or to modify the dialog flow. For more information, see the [Watson Assistant service documentation][docs_landing].
 
 ## Deploying to IBM Cloud
 
@@ -162,7 +125,7 @@ You can use Cloud Foundry to deploy your local version of the app to IBM Cloud.
   ```yml
   ---
   declared-services:
-   my-watson-assistant-service:
+   eventConversation:
      label: conversation
      plan: free
   applications:
@@ -172,7 +135,7 @@ You can use Cloud Foundry to deploy your local version of the app to IBM Cloud.
    memory: 256M
    instances: 1
    services:
-   - my-watson-assistant-service
+   - eventConversation
    env:
      NPM_CONFIG_PRODUCTION: false
   ```
